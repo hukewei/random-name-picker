@@ -16,6 +16,15 @@ import SoundEffects from '@js/SoundEffects';
   const nameListTextArea = document.getElementById('name-list') as HTMLTextAreaElement | null;
   const removeNameFromListCheckbox = document.getElementById('remove-from-list') as HTMLInputElement | null;
   const enableSoundCheckbox = document.getElementById('enable-sound') as HTMLInputElement | null;
+  const winnerImg = document.getElementById('winner_img') as HTMLImageElement | null;
+  const params = new URLSearchParams(window.location.search);
+  let prefilledNames : string[] = [];
+  params.forEach((value, key) => {
+    if (key === 'data') {
+      console.log(atob(value));
+      prefilledNames = atob(value).split(',');
+    }
+  });
 
   // Graceful exit if necessary elements are not found
   if (!(
@@ -27,6 +36,7 @@ import SoundEffects from '@js/SoundEffects';
     && settingsSaveButton
     && settingsCloseButton
     && sunburstSvg
+    && winnerImg
     && confettiCanvas
     && nameListTextArea
     && removeNameFromListCheckbox
@@ -75,6 +85,7 @@ import SoundEffects from '@js/SoundEffects';
       window.cancelAnimationFrame(confettiAnimationId);
     }
     sunburstSvg.style.display = 'none';
+    winnerImg.style.display = 'none';
   };
 
   /**  Function to be trigger before spinning */
@@ -89,6 +100,8 @@ import SoundEffects from '@js/SoundEffects';
   const onSpinEnd = async () => {
     confettiAnimation();
     sunburstSvg.style.display = 'block';
+    // winnerImg.src = slot.current_winner_url.toString();
+    winnerImg.style.display = 'block';
     await soundEffects.win();
     drawButton.disabled = false;
     settingsButton.disabled = false;
@@ -100,7 +113,8 @@ import SoundEffects from '@js/SoundEffects';
     maxReelItems: MAX_REEL_ITEMS,
     onSpinStart,
     onSpinEnd,
-    onNameListChanged: stopWinningAnimation
+    onNameListChanged: stopWinningAnimation,
+    nameList: prefilledNames
   });
 
   /** To open the setting page */
@@ -156,6 +170,21 @@ import SoundEffects from '@js/SoundEffects';
       : [];
     slot.shouldRemoveWinnerFromNameList = removeNameFromListCheckbox.checked;
     soundEffects.mute = !enableSoundCheckbox.checked;
+    if (slot.names.length > 0) {
+      let nameString = '';
+      slot.names.forEach((name) => {
+        if (nameString === '') {
+          nameString = name;
+        } else {
+          nameString += `,${name}`;
+        }
+      });
+      console.log(nameString);
+      const newParams = new URLSearchParams(window.location.search);
+      newParams.set('data', btoa(nameString));
+      window.history.pushState({}, '', `?${newParams.toString()}`);
+    }
+
     onSettingsClose();
   });
 

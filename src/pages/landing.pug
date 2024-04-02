@@ -8,17 +8,19 @@ include ../mixins/icons
       +svg-icon.red.big(svg-icon-name='settings')
 
   canvas#confetti-canvas.confetti
-
+  
   #lucky-draw
+    #avatar.avatar
+      img( id="winner_img" class="portrait" alt="go/home to authenticate" style="display: none;" )
     .title
       //- Pug loader currently does not handle webpack alias so we will use relative path here
       include ../assets/images/title.svg
-
     .slot
       .slot__outer
         .slot__inner
           .slot__shadow
           #reel.reel
+
 
       #sunburst.sunburst
         img(src="~@images/sunburst.svg" alt="sunburst")

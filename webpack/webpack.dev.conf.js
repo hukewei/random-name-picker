@@ -34,7 +34,7 @@ module.exports = merge(baseWebpackConfig, {
   },
   devServer: {
     host: '0.0.0.0',
-    port: 8888,
+    port: 4242,
     watchFiles: ['src/**/*'],
     client: {
       overlay: {

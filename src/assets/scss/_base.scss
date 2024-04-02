@@ -29,14 +29,6 @@ body {
 }
 
 #app {
-  background: linear-gradient(
-    240deg,
-    $color-red-step1 0.13%,
-    $color-red-step2 26.19%,
-    $color-red-step3 52.6%,
-    $color-red-step4 79.08%,
-    $color-red-step5 100%
-  );
   color: $color-text-light;
   padding: 0 3.125rem;
   min-height: 100%;
@@ -90,6 +82,45 @@ body {
   max-width: $screen-xl;
   flex: 1 1 0;
   min-height: min-content;
+}
+
+.avatar {
+  margin: auto;
+  width: 50%;
+}
+
+.avatar {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  overflow: hidden;
+}
+.avatar img {
+  object-fit: cover;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.avatar img.portrait {
+  width: 100%;
+  height: 67%;
+}
+
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
 }
 
 .footer {

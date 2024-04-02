@@ -12,6 +12,9 @@ interface SlotConfigurations {
 
   /** User configuration for callback function that runs after user updates the name list */
   onNameListChanged?: () => void;
+
+  /** prefilled names */
+  nameList?: string[];
 }
 
 /** Class for doing random name pick and animation */
@@ -43,6 +46,8 @@ export default class Slot {
   /** Callback function that runs after spinning reel */
   private onNameListChanged?: NonNullable<SlotConfigurations['onNameListChanged']>;
 
+  current_winner_url: string;
+
   /**
    * Constructor of Slot
    * @param maxReelItems  Maximum item inside a reel
@@ -50,6 +55,7 @@ export default class Slot {
    * @param reelContainerSelector  The element ID of reel items to be appended
    * @param onSpinStart  Callback function that runs before spinning reel
    * @param onNameListChanged  Callback function that runs when user updates the name list
+   * @param nameList  Callback function that runs when user updates the name list
    */
   constructor(
     {
@@ -58,10 +64,12 @@ export default class Slot {
       reelContainerSelector,
       onSpinStart,
       onSpinEnd,
-      onNameListChanged
+      onNameListChanged,
+      nameList = []
     }: SlotConfigurations
   ) {
-    this.nameList = [];
+    this.nameList = nameList;
+    this.current_winner_url = '';
     this.havePreviousWinner = false;
     this.reelContainer = document.querySelector(reelContainerSelector);
     this.maxReelItems = maxReelItems;
@@ -191,7 +199,11 @@ export default class Slot {
 
     console.info('Displayed items: ', randomNames);
     console.info('Winner: ', randomNames[randomNames.length - 1]);
-
+    this.current_winner_url = `https://home.corp.stripe.com/img/photos/${randomNames[randomNames.length - 1]}.jpg`;
+    const winnerImg = document.getElementById('winner_img') as HTMLImageElement | null;
+    if (winnerImg) {
+      winnerImg.src = this.current_winner_url.toString();
+    }
     // Remove winner form name list if necessary
     if (shouldRemoveWinner) {
       this.nameList.splice(this.nameList.findIndex(
@@ -213,6 +225,7 @@ export default class Slot {
     // Sets the current playback time to the end of the animation
     // Fix issue for animatin not playing after the initial play on Safari
     reelAnimation.finish();
+    console.info(`winner photo : ${this.current_winner_url}`);
 
     Array.from(reelContainer.children)
       .slice(0, reelContainer.children.length - 1)
