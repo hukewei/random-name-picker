@@ -205,7 +205,7 @@ export default class Slot {
     const winnerImg = document.getElementById('winner_img') as HTMLImageElement | null;
 
     if (winnerImg) {
-      winnerImg.src = fallbackUrl;
+      winnerImg.src = currentWinnerUrl;
 
       const image = new Image();
       image.onload = function () {
