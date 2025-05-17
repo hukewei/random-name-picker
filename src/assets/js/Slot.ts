@@ -46,7 +46,7 @@ export default class Slot {
   /** Callback function that runs after spinning reel */
   private onNameListChanged?: NonNullable<SlotConfigurations['onNameListChanged']>;
 
-  current_winner_url: string;
+  currentWinnerUrl: string;
 
   /**
    * Constructor of Slot
@@ -69,7 +69,7 @@ export default class Slot {
     }: SlotConfigurations
   ) {
     this.nameList = nameList;
-    this.current_winner_url = '';
+    this.currentWinnerUrl = '';
     this.havePreviousWinner = false;
     this.reelContainer = document.querySelector(reelContainerSelector);
     this.maxReelItems = maxReelItems;
@@ -199,10 +199,23 @@ export default class Slot {
 
     console.info('Displayed items: ', randomNames);
     console.info('Winner: ', randomNames[randomNames.length - 1]);
-    this.current_winner_url = `https://home.corp.stripe.com/img/photos/${randomNames[randomNames.length - 1]}.jpg`;
+    const currentWinner = randomNames[randomNames.length - 1];
+    const currentWinnerUrl = `https://home.corp.stripe.com/img/photos/${currentWinner}.jpg`;
+    const fallbackUrl = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${currentWinner}`;
     const winnerImg = document.getElementById('winner_img') as HTMLImageElement | null;
+
     if (winnerImg) {
-      winnerImg.src = this.current_winner_url.toString();
+      winnerImg.src = fallbackUrl;
+
+      const image = new Image();
+      image.onload = function () {
+        console.log('image exist');
+      };
+      image.onerror = function () {
+        console.log('image not exist');
+        winnerImg.src = fallbackUrl;
+      };
+      image.src = currentWinnerUrl;
     }
     // Remove winner form name list if necessary
     if (shouldRemoveWinner) {
@@ -225,7 +238,7 @@ export default class Slot {
     // Sets the current playback time to the end of the animation
     // Fix issue for animatin not playing after the initial play on Safari
     reelAnimation.finish();
-    console.info(`winner photo : ${this.current_winner_url}`);
+    console.info(`winner photo : ${this.currentWinnerUrl}`);
 
     Array.from(reelContainer.children)
       .slice(0, reelContainer.children.length - 1)
