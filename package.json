@@ -11,7 +11,7 @@
     "prepare": "husky install",
     "extract-latest-change-log": "node scripts/extractLatestChangeLog.js",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "echo 'luckydraw.kekebox.com' > dist/CNAME && gh-pages -d dist"
   },
   "author": "Kewei HU",
   "license": "MIT",
