@@ -201,7 +201,7 @@ export default class Slot {
     console.info('Winner: ', randomNames[randomNames.length - 1]);
     const currentWinner = randomNames[randomNames.length - 1];
     const currentWinnerUrl = `https://home.corp.stripe.com/img/photos/${currentWinner}.jpg`;
-    const fallbackUrl = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${currentWinner}`;
+    const fallbackUrl = `https://api.dicebear.com/9.x/bottts/svg?seed=${currentWinner}`;
     const winnerImg = document.getElementById('winner_img') as HTMLImageElement | null;
 
     if (winnerImg) {
